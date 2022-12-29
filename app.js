@@ -1,3 +1,6 @@
+const dotenv = require("dotenv")
+dotenv.config()
+
 const { App } = require('@slack/bolt');
 
 // Initializes your app with your bot token and signing secret
