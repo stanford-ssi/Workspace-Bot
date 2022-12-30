@@ -36,28 +36,26 @@
         }
       },
       {
-        "type": "section",
+        "type": "input",
         "block_id": "checkbox",
-        "text": {
-          "type": "mrkdwn",
-          "text": "This is a section block with checkboxes."
+        "optional": true,
+        "label": {
+          "type": "plain_text",
+          "text": "Check if task is suitable for independent work"
 			  },
-        "accessory": {
+        "element": {
           "type": "checkboxes",
+          "action_id": "checkboxes",
           "options": [
             {
               "text": {
                 "type": "mrkdwn",
-                "text": "*this is mrkdwn text*"
-              },
-              "description": {
-                "type": "mrkdwn",
-                "text": "*this is mrkdwn text*"
+                "text": "Add to independent tasks"
               },
               "value": "value-0"
             }
-          ],
-          "action_id": "checkboxes"
+          ]
+          
         }
       }
     ],

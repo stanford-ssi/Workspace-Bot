@@ -178,8 +178,13 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
 
     const nameField = body.view.state.values.title.title_input.value
     const detailsField = body.view.state.values.details.details_input.value
-    const independentTask = body.view.state.values.checkbox.checkboxes.selected_options[0].value == "value-0"
+    var independentTask = false
 
+    try{ //causes issues if checkbox is not selected
+        independentTask = body.view.state.values.checkbox.checkboxes.selected_options[0].value == "value-0"
+    }catch{
+        independentTask = false
+    }
     console.log(independentTask)
 
     fs.readFile("messages/request/request.json", 'utf8', async (err, data) => {
@@ -201,7 +206,7 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
         modal.channel = metadata.channel_id
 
         //posts message to workspace core - add this back in to remove buttons
-        //await app.client.chat.update(modal)
+        await app.client.chat.update(modal)
         } catch (e) {
         console.log(e)
         }
@@ -217,10 +222,10 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
     while(taskSheet.getCell(emptyRowIndex, 2).value != null) {
         emptyRowIndex++
     }
-    taskSheet.getCell(emptyRowIndex-1, 1).value = false
-    taskSheet.getCell(emptyRowIndex-1, 2).value = nameField
-    taskSheet.getCell(emptyRowIndex-1, 3).value = detailsField
-    taskSheet.getCell(emptyRowIndex-1, 4).value = false //todo: add independent column
+    taskSheet.getCell(emptyRowIndex, 1).value = false
+    taskSheet.getCell(emptyRowIndex, 2).value = nameField
+    taskSheet.getCell(emptyRowIndex, 3).value = detailsField
+    taskSheet.getCell(emptyRowIndex, 4).value = independentTask
     await taskSheet.saveUpdatedCells();
 
     //notify requester
