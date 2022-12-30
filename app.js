@@ -3,16 +3,36 @@ dotenv.config()
 
 const { App } = require('@slack/bolt');
 
-// Initializes your app with your bot token and signing secret
+// Slack API
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   signingSecret: process.env.SLACK_SIGNING_SECRET
 });
-var fs = require('fs');
 module.exports.app = app; //makes it accessible outside this file
 
-const { handleWorkspaceRequest } = require('./workspaceRequestHandler');
+//Reading and writing to files API
+var fs = require('fs');
+module.exports.fs = fs;
+
+//Google Sheets API
+const { GoogleSpreadsheet } = require('google-spreadsheet');
+module.exports.doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
+const creds = require('./client_secret.json');
+module.exports.creds = creds;
+
+
+
+//Request
+const { handleWorkspaceRequest, handleAddTask, handleResolve, handleResolveSubmission, handleAddTaskSubmission } = require('./workspaceRequestHandler');
 app.command('/workspace-request', handleWorkspaceRequest);
+app.action('add_task', handleAddTask);
+app.action('resolve', handleResolve);
+app.view('resolve_modal', handleResolveSubmission);
+app.view('add_task_modal', handleAddTaskSubmission);
+
+
+
+
 
 (async () => {
   // Start your app
@@ -20,3 +40,8 @@ app.command('/workspace-request', handleWorkspaceRequest);
 
   console.log('⚡️ Bolt app is running!');
 })();
+
+/* Todo:
+- Add checks for approval if member is in workspace core
+*/
+
