@@ -8,7 +8,7 @@ module.exports.handleWorkspaceRequest = async ({ command, ack, respond }) => {
         var fs = require('fs');
 
 
-        fs.readFile("messages/request.json", 'utf8', async (err, data) => {
+        fs.readFile("messages/request/request.json", 'utf8', async (err, data) => {
             if (err) throw err;
             const messagePayload = JSON.parse(data);
             messagePayload.blocks[1].text.text = `*User:* @${command.user_name}`
