@@ -29,7 +29,9 @@ app.action('add_task', handleAddTask);
 app.action('resolve', handleResolve);
 app.view('resolve_modal', handleResolveSubmission);
 app.view('add_task_modal', handleAddTaskSubmission);
-
+app.view('checkboxes', async ({ ack, body}) => {
+  await ack();
+});
 
 
 
@@ -43,5 +45,6 @@ app.view('add_task_modal', handleAddTaskSubmission);
 
 /* Todo:
 - Add checks for approval if member is in workspace core
+- Messages workspace core when person completes task asynchronously
 */
 

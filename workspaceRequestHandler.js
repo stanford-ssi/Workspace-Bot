@@ -1,4 +1,4 @@
-const { app, fs, doc } = require('./app');
+const { app, fs, doc, creds } = require('./app');
 
 module.exports.handleWorkspaceRequest = async ({ command, ack, respond }) => {
     // Acknowledge command request
@@ -176,8 +176,11 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
 
     metadata = JSON.parse(body.view.private_metadata)
 
-    const nameField = body.view.state.values.input_d.dreamy_input.value
-    const detailsField = body.view.state.values.input_c.dreamy_input.value
+    const nameField = body.view.state.values.title.title_input.value
+    const detailsField = body.view.state.values.details.details_input.value
+    const independentTask = body.view.state.values.checkbox.checkboxes.selected_options[0].value == "value-0"
+
+    console.log(independentTask)
 
     fs.readFile("messages/request/request.json", 'utf8', async (err, data) => {
         if (err) throw err;
@@ -198,7 +201,7 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
         modal.channel = metadata.channel_id
 
         //posts message to workspace core - add this back in to remove buttons
-        await app.client.chat.update(modal)
+        //await app.client.chat.update(modal)
         } catch (e) {
         console.log(e)
         }
@@ -207,17 +210,18 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
 
     //add to spreadsheet
 
-    const taskSheet = await loadTasksSheet()
+    const taskSheet = await loadSheet("1301847628")
 
-    var jobID = convertToJobID(`${taskSheet.rowCount}`)
+    var emptyRowIndex = 8
 
-    const requester = await client.users.info({ user: metadata.requester_id })
-    const requesterName = requester.user.real_name
-
-    const approver = await client.users.info({ user: metadata.approver_id })
-    const approverName = approver.user.real_name
-
-    await taskSheet.addRow([jobID, nameField, detailsField, "1", "1", requesterName, approverName])
+    while(taskSheet.getCell(emptyRowIndex, 2).value != null) {
+        emptyRowIndex++
+    }
+    taskSheet.getCell(emptyRowIndex-1, 1).value = false
+    taskSheet.getCell(emptyRowIndex-1, 2).value = nameField
+    taskSheet.getCell(emptyRowIndex-1, 3).value = detailsField
+    taskSheet.getCell(emptyRowIndex-1, 4).value = false //todo: add independent column
+    await taskSheet.saveUpdatedCells();
 
     //notify requester
     const text = `Your request has been added to the todo list by <@${metadata.approver_id}>`
@@ -242,14 +246,16 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
     });
 };
 
-async function loadTasksSheet() {
+async function loadSheet(title) {
     await doc.useServiceAccountAuth({
       client_email: creds.client_email,
       private_key: creds.private_key,
     });
     await doc.loadInfo(); // loads document properties and worksheets
-    const sheet = doc.sheetsByIndex[1]; // or use doc.sheetsById[id]
+    console.log(doc.title)
+    const sheet = doc.sheetsById[title]
     const cellRange = `A1:H${sheet.rowCount}`
     await sheet.loadCells(cellRange)
+    console.log(`Loaded ${sheet.title} with ${sheet.rowCount} rows`)
     return sheet
   }
