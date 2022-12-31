@@ -44,9 +44,7 @@ app.action('add_task', handleAddTask);
 app.action('resolve', handleResolve);
 app.view('resolve_modal', handleResolveSubmission);
 app.view('add_task_modal', handleAddTaskSubmission);
-app.view('checkboxes', async ({ ack, body}) => {
-  await ack();
-});
+
 
 
 

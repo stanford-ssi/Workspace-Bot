@@ -4,8 +4,34 @@ module.exports.handleWorkspaceRequest = async ({ command, ack, respond }) => {
     // Acknowledge command request
     ack();
 
+    membersCall = await app.client.conversations.members({
+        channel: "C03UL0RTFJ8" //Channel ID for workspace core
+    })
+
+    console.log(membersCall.members)
+    //check if user_id is in membersCall.members
+    if(membersCall.members.includes(command.user_id)){
+        fs.readFile("messages/request/add_task_modal.json", 'utf8', async (err, data) => {
+            if (err) throw err;
+            try {
+              const modal = JSON.parse(data);
+              modal.trigger_id = command.trigger_id
+              modal.view.private_metadata = JSON.stringify({
+                "direct_request": "true",
+                "requester_id": command.user_id,
+                "channel_id": command.channel_id
+            })
+              await app.client.views.open(modal);
+            } catch (e) {
+              console.log(e)
+            }
+        });
+        return
+    }
+    
+
     try {
-        var fs = require('fs');
+        //var fs = require('fs');
 
 
         fs.readFile("messages/request/request.json", 'utf8', async (err, data) => {
@@ -43,6 +69,7 @@ module.exports.handleAddTask = async ({ body, ack, say}) => {
       "message_description": body.message.blocks[2].text.text,
       "channel_id": body.container.channel_id,
       "description": body.message.blocks[2].text.text,
+      "direct_request": "false"
     })
   
     fs.readFile("messages/request/add_task_modal.json", 'utf8', async (err, data) => {
@@ -171,7 +198,7 @@ module.exports.handleResolveSubmission = async ({ ack, body, view, client, logge
     });
   };
 
-module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logger }) => {
+module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logger}) => {
     await ack();
 
     metadata = JSON.parse(body.view.private_metadata)
@@ -186,32 +213,6 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
         independentTask = false
     }
     console.log(independentTask)
-
-    fs.readFile("messages/request/request.json", 'utf8', async (err, data) => {
-        if (err) throw err;
-        try {
-        const modal = JSON.parse(data);
-        modal.blocks[1].text.text = metadata.message_user_text
-        modal.blocks[2].text.text = metadata.message_description
-        modal.blocks[4] = {
-            "type": "context",
-            "elements": [
-            {
-                "type": "mrkdwn",
-                "text": `Added to tasks by <@${metadata.approver_id}>`
-            }
-            ]
-        };
-        modal.ts = metadata.message_ts
-        modal.channel = metadata.channel_id
-
-        //posts message to workspace core - add this back in to remove buttons
-        await app.client.chat.update(modal)
-        } catch (e) {
-        console.log(e)
-        }
-    });
-
 
     //add to spreadsheet
 
@@ -229,26 +230,68 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
     taskSheet.getCell(emptyRowIndex, 4).value = independentTask
     await taskSheet.saveUpdatedCells();
 
-    //notify requester
-    const text = `Your request has been added to the todo list by <@${metadata.approver_id}>`
+    if(metadata.direct_request == "false"){ //only if request was asked by normal member
 
-    fs.readFile("messages/request/task_added_notification.json", 'utf8', async (err, data) => {
-        if (err) throw err;
-        try {
-        const modal = JSON.parse(data);
-        modal.channel = metadata.requester_id
-        modal.text = text
-        modal.blocks[0].text.text = text
-        modal.blocks[1].text.text = metadata.message_description
-        modal.blocks[2].text.text = `*Task ID:* ${taskId}`
-        modal.blocks[3].text.text = `*Task title:* ${nameField}`
-        modal.blocks[4].text.text = `*Task description:* ${detailsField}`
+        fs.readFile("messages/request/request.json", 'utf8', async (err, data) => {
+            if (err) throw err;
+            try {
+            const modal = JSON.parse(data);
+            modal.blocks[1].text.text = metadata.message_user_text
+            modal.blocks[2].text.text = metadata.message_description
+            modal.blocks[4] = {
+                "type": "context",
+                "elements": [
+                {
+                    "type": "mrkdwn",
+                    "text": `Added to tasks by <@${metadata.approver_id}>`
+                }
+                ]
+            };
+            modal.ts = metadata.message_ts
+            modal.channel = metadata.channel_id
 
-        await app.client.chat.postMessage(modal)
+            //posts message to workspace core - add this back in to remove buttons
+            await app.client.chat.update(modal)
+            } catch (e) {
+            console.log(e)
+            }
+        });
 
-        } catch (e) {
-        console.log(e)
-        }
-    });
+            //notify requester
+        const text = `Your request has been added to the todo list by <@${metadata.approver_id}>`
+
+        fs.readFile("messages/request/task_added_notification.json", 'utf8', async (err, data) => {
+            if (err) throw err;
+            try {
+            const modal = JSON.parse(data);
+            modal.channel = metadata.requester_id
+            modal.text = text
+            modal.blocks[0].text.text = text
+            modal.blocks[1].text.text = metadata.message_description
+            modal.blocks[2].text.text = `*Task ID:* ${taskId}`
+            modal.blocks[3].text.text = `*Task title:* ${nameField}`
+            modal.blocks[4].text.text = `*Task description:* ${detailsField}`
+
+            await app.client.chat.postMessage(modal)
+
+            } catch (e) {
+            console.log(e)
+            }
+        });
+
+
+    }else{
+        await app.client.chat.postEphemeral({
+            channel: metadata.channel_id,
+            text: `Task added to todo list.`,
+            user: metadata.requester_id,
+        })
+
+    }
+
+
+
+
+
 };
 
