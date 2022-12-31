@@ -206,7 +206,7 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
         modal.channel = metadata.channel_id
 
         //posts message to workspace core - add this back in to remove buttons
-        //await app.client.chat.update(modal)
+        await app.client.chat.update(modal)
         } catch (e) {
         console.log(e)
         }
@@ -222,6 +222,7 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
     while(taskSheet.getCell(emptyRowIndex, 2).value != null) {
         emptyRowIndex++
     }
+    taskId = taskSheet.getCell(emptyRowIndex, 0).value
     taskSheet.getCell(emptyRowIndex, 1).value = false
     taskSheet.getCell(emptyRowIndex, 2).value = nameField
     taskSheet.getCell(emptyRowIndex, 3).value = detailsField
@@ -239,7 +240,7 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
         modal.text = text
         modal.blocks[0].text.text = text
         modal.blocks[1].text.text = metadata.message_description
-        modal.blocks[2].text.text = `*Task ID:* ${taskSheet.rowCount}`
+        modal.blocks[2].text.text = `*Task ID:* ${taskId}`
         modal.blocks[3].text.text = `*Task title:* ${nameField}`
         modal.blocks[4].text.text = `*Task description:* ${detailsField}`
 
