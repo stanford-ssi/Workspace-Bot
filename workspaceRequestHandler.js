@@ -1,4 +1,4 @@
-const { app, fs, doc, creds } = require('./app');
+const { app, fs, doc, loadSheet } = require('./app');
 
 module.exports.handleWorkspaceRequest = async ({ command, ack, respond }) => {
     // Acknowledge command request
@@ -206,7 +206,7 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
         modal.channel = metadata.channel_id
 
         //posts message to workspace core - add this back in to remove buttons
-        await app.client.chat.update(modal)
+        //await app.client.chat.update(modal)
         } catch (e) {
         console.log(e)
         }
@@ -251,16 +251,3 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
     });
 };
 
-async function loadSheet(title) {
-    await doc.useServiceAccountAuth({
-      client_email: creds.client_email,
-      private_key: creds.private_key,
-    });
-    await doc.loadInfo(); // loads document properties and worksheets
-    console.log(doc.title)
-    const sheet = doc.sheetsById[title]
-    const cellRange = `A1:H${sheet.rowCount}`
-    await sheet.loadCells(cellRange)
-    console.log(`Loaded ${sheet.title} with ${sheet.rowCount} rows`)
-    return sheet
-  }

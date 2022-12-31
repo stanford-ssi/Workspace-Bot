@@ -16,9 +16,24 @@ module.exports.fs = fs;
 
 //Google Sheets API
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-module.exports.doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
-const creds = require('./client_secret.json');
-module.exports.creds = creds;
+const doc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID);
+module.exports.doc = doc;
+
+
+//General functions
+module.exports.loadSheet = async function loadSheet(title) {
+  await doc.useServiceAccountAuth({
+    client_email: process.env.CLIENT_EMAIL,
+    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+  });
+  await doc.loadInfo(); // loads document properties and worksheets
+  console.log(doc.title)
+  const sheet = doc.sheetsById[title]
+  const cellRange = `A1:H${sheet.rowCount}`
+  await sheet.loadCells(cellRange)
+  console.log(`Loaded ${sheet.title} with ${sheet.rowCount} rows`)
+  return sheet
+}
 
 
 
