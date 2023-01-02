@@ -1,0 +1,33 @@
+{
+	"title": {
+		"type": "plain_text",
+		"text": "DM Members",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Preview Message",
+		"emoji": true
+	},
+	"type": "modal",
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "input",
+			"element": {
+				"type": "plain_text_input",
+				"multiline": true,
+				"action_id": "plain_text_input-action"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Message",
+				"emoji": true
+			}
+		}
+	]
+}

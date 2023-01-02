@@ -216,7 +216,7 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
 
     //add to spreadsheet
 
-    const taskSheet = await loadSheet("1301847628")
+    const taskSheet = await loadSheet("1301847628") //Workspace Cleaning Todos sheet
 
     var emptyRowIndex = 8
 
