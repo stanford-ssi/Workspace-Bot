@@ -1,4 +1,4 @@
-const { app, fs, loadSheet, memberDoc } = require('./app');
+const { app, fs, loadSheet, memberDoc, indexOfUserEmail } = require('./app');
 
 module.exports.handleWorkspaceInfo = async ({ command, ack, respond }) => {
     await ack();
@@ -13,17 +13,12 @@ module.exports.handleWorkspaceInfo = async ({ command, ack, respond }) => {
   
     const useremail = userinfo.user.profile.email
   
-    var tasksRequired
-    var tasksCompleted
-    var status
-  
-    for (let i = 0; i < sheet.rowCount; i++) {
-      if (sheet.getCell(i, 1).value == useremail) {
-        tasksRequired = sheet.getCell(i, 4).value
-        tasksCompleted = sheet.getCell(i, 5).value
-        status = sheet.getCell(i, 3).value
-      }
-    }
+    const i = await indexOfUserEmail(useremail, sheet)
+
+    const tasksRequired = sheet.getCell(i, 4).value
+    const tasksCompleted = sheet.getCell(i, 5).value
+    const status = sheet.getCell(i, 3).value
+
   
     fs.readFile("messages/info/workspace_info.json", 'utf8', async (err, data) => {
       if (err) throw err;

@@ -6,10 +6,11 @@
 	},
 	"submit": {
 		"type": "plain_text",
-		"text": "Preview Message",
+		"text": "Send Message",
 		"emoji": true
 	},
 	"type": "modal",
+	"callback_id": "dm_modal",
 	"close": {
 		"type": "plain_text",
 		"text": "Cancel",
@@ -18,16 +19,40 @@
 	"blocks": [
 		{
 			"type": "input",
+			"block_id": "message_input",
 			"element": {
 				"type": "plain_text_input",
 				"multiline": true,
-				"action_id": "plain_text_input-action"
+				"action_id": "plain_text_input_action"
 			},
 			"label": {
 				"type": "plain_text",
 				"text": "Message",
 				"emoji": true
 			}
-		}
+		},
+		{
+			"type": "input",
+			"block_id": "checkbox",
+			"optional": true,
+			"label": {
+			  "type": "plain_text",
+			  "text": " "
+				  },
+			"element": {
+			  "type": "checkboxes",
+			  "action_id": "checkboxes",
+			  "options": [
+				{
+				  "text": {
+					"type": "mrkdwn",
+					"text": "Test message (only sends the message to you)"
+				  },
+				  "value": "value-0"
+				}
+			  ]
+			  
+			}
+		  }
 	]
 }

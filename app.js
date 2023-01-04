@@ -44,6 +44,32 @@ module.exports.indexOfTaskID = async function indexOfTaskID(taskID, sheet) {
   }
 }
 
+module.exports.indexOfUserEmail = async function indexOfUserEmail(userEmail, sheet) {
+  for (let i = 0; i < sheet.rowCount; i++) {
+    if (sheet.getCell(i, 1).value == userEmail) {
+      return i
+    }
+  }
+}
+
+module.exports.getUserIdFromEmail = async function getUserIdFromEmail(userEmail) { //might need async stuff here too
+  try {
+    return result = await app.client.users.lookupByEmail({
+      email: userEmail
+    }).user.id
+  } catch (e) {
+    return userEmail //if it can't find it, returns user email to check what happened
+  }
+}
+
+module.exports.getNameGreeting = async function getNameGreeting(fullName) {
+  if (fullName.split("").filter(x => x == " ").length == 1) { //if name has obvious first and last name, use first name
+    return fullName.split(" ")[0]
+  } else { //otherwise use full name
+    return fullName
+  }
+}
+
 
 
 //Workspace Request
@@ -55,16 +81,16 @@ app.view('resolve_modal', handleResolveSubmission);
 app.view('add_task_modal', handleAddTaskSubmission);
 
 //Complete Task
-const {handleWorkspaceComplete, handleCompleteSubmit} = require('./workspaceCompleteHandler');
+const { handleWorkspaceComplete, handleCompleteSubmit } = require('./workspaceCompleteHandler');
 app.command('/workspace-complete', handleWorkspaceComplete);
 app.view('submit_task', handleCompleteSubmit);
 
 //Info
-const {handleWorkspaceInfo} = require('./workspaceInfoHandler');
+const { handleWorkspaceInfo } = require('./workspaceInfoHandler');
 app.command('/workspace-info', handleWorkspaceInfo);
 
 //DM members
-const {handleDM, handleDMSubmission} = require('./dmHandler');
+const { handleDM, handleDMSubmission } = require('./dmHandler');
 app.command('/workspace-dm', handleDM);
 app.view('dm_modal', handleDMSubmission);
 
