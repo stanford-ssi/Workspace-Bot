@@ -1,15 +1,14 @@
-const { app, fs, doc, loadSheet } = require('./app');
+const { app, fs, loadSheet, taskDoc } = require('./app');
 
 module.exports.handleWorkspaceRequest = async ({ command, ack, respond }) => {
     // Acknowledge command request
     ack();
+    console.log("/workspace-request command received")
 
     membersCall = await app.client.conversations.members({
-        channel: "C03UL0RTFJ8" //Channel ID for workspace core
+        channel: process.env.WORKSPACE_CORE_CHANNEL_ID //Channel ID for workspace core
     })
-
-    console.log(membersCall.members)
-    //check if user_id is in membersCall.members
+    //check if user_id is in workspace
     if(membersCall.members.includes(command.user_id)){
         fs.readFile("messages/request/add_task_modal.json", 'utf8', async (err, data) => {
             if (err) throw err;
@@ -28,12 +27,13 @@ module.exports.handleWorkspaceRequest = async ({ command, ack, respond }) => {
         });
         return
     }
+    if(command.text.length < 3){
+        respond("Please provide a description of your request after the command. (e.g. /workspace-request more printer filament)")
+        return
+    }
     
 
     try {
-        //var fs = require('fs');
-
-
         fs.readFile("messages/request/request.json", 'utf8', async (err, data) => {
             if (err) throw err;
             const messagePayload = JSON.parse(data);
@@ -216,7 +216,7 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
 
     //add to spreadsheet
 
-    const taskSheet = await loadSheet("1301847628") //Workspace Cleaning Todos sheet
+    const taskSheet = await loadSheet(taskDoc, process.env.GOOGLE_SHEET_TASK_TAB) //Workspace Cleaning Todos sheet
 
     var emptyRowIndex = 8
 
@@ -258,7 +258,7 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
         });
 
             //notify requester
-        const text = `Your request has been added to the todo list by <@${metadata.approver_id}>`
+        const text = `Your request has been added to the <https://docs.google.com/spreadsheets/d/1H-DUIAoUmsh2QWe0O9Lts67oEdP0FbVtT3xsi7gUWrc/edit#gid=1301847628|todo list> by <@${metadata.approver_id}>`
 
         fs.readFile("messages/request/task_added_notification.json", 'utf8', async (err, data) => {
             if (err) throw err;
@@ -268,9 +268,8 @@ module.exports.handleAddTaskSubmission = async ({ ack, body, view, client, logge
             modal.text = text
             modal.blocks[0].text.text = text
             modal.blocks[1].text.text = metadata.message_description
-            modal.blocks[2].text.text = `*Task ID:* ${taskId}`
-            modal.blocks[3].text.text = `*Task title:* ${nameField}`
-            modal.blocks[4].text.text = `*Task description:* ${detailsField}`
+            modal.blocks[2].text.text = `*Task title:* ${nameField}`
+            modal.blocks[3].text.text = `*Task description:* ${detailsField}`
 
             await app.client.chat.postMessage(modal)
 

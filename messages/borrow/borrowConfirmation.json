@@ -6,7 +6,7 @@
 			"type": "section",
 			"text": {
 				"type": "mrkdwn",
-				"text": "Thank you for checking out the item(s). Please return the item(s) by the [date]. If you have any questions, please contact the workspace managers."
+				"text": "Thank you for checking out the item(s). Please return the item(s) by ${date}. If you have any questions, please contact the workspace managers."
 			}
 		},
 		{
@@ -98,7 +98,8 @@
 	"metadata": {
 		"event_type": "test",
 		"event_payload": {
-		  "borrowId": "invalid"
+		  "borrowId": "invalid",
+		  "itemsBorrowed": "invalid"
 		}
 	  }
 }

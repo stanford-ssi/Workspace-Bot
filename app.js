@@ -130,11 +130,14 @@ const { handleThank } = require('./workspaceThankHandler');
 app.command('/workspace-thank', handleThank);
 
 //Borrow
-const { handleBorrow, handleBorrowSubmit, handleReturn, handleExtension } = require('./borrowHandler');
+const { handleBorrow, handleBorrowList, handleBorrowSubmit, handleReturn, handleExtension, checkOverdue } = require('./borrowHandler');
 app.command('/borrow', handleBorrow);
+app.command('/borrowed-items', handleBorrowList);
 app.view('borrow_modal', handleBorrowSubmit);
 app.action('return', handleReturn);
 app.action('extension_request', handleExtension);
+app.action('permissionUser', handleExtension);
+setInterval(checkOverdue, 86400000); // Execute the doSomething function every 60000 milliseconds (1 minute)
 
 (async () => {
   // Start your app

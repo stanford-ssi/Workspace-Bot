@@ -20,13 +20,6 @@
         "type": "section",
         "text": {
           "type": "mrkdwn",
-          "text": "*Task ID:* ${sheet.rowCount}"
-        }
-      },
-      {
-        "type": "section",
-        "text": {
-          "type": "mrkdwn",
           "text": "*Task title:* ${nameField}"
         }
       },
