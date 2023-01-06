@@ -136,7 +136,7 @@ app.command('/borrowed-items', handleBorrowList);
 app.view('borrow_modal', handleBorrowSubmit);
 app.action('return', handleReturn);
 app.action('extension_request', handleExtension);
-app.action('permissionUser', handleExtension);
+app.action('users_select_action', async ({ options, ack }) => {ack()});
 setInterval(checkOverdue, 86400000); // Execute the doSomething function every 60000 milliseconds (1 minute)
 
 (async () => {

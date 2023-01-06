@@ -59,20 +59,20 @@ module.exports.handleBorrowSubmit = async ({ ack, body, view, client, logger }) 
   //validate date
   const today = new Date();
   const returnDateObj = new Date(returnDate);
-  // if (returnDateObj < today) {
-  //   await client.chat.postMessage({
-  //     channel: requester,
-  //     text: "Error submitting borrow request: please select a date in the future."
-  //   });
-  //   return
-  // }
-  // else if (returnDateObj > today.setDate(today.getDate() + 7) && permissionUser == null) {
-  //   await client.chat.postMessage({
-  //     channel: requester,
-  //     text: "Error submitting borrow request: you must select a user to approve this request because it's being borrowed for more than 7 days."
-  //   });
-  //   return
-  // }
+  if (returnDateObj < today) {
+    await client.chat.postMessage({
+      channel: requester,
+      text: "Error submitting borrow request: please select a date in the future."
+    });
+    return
+  }
+  else if (returnDateObj > today.setDate(today.getDate() + 7) && permissionUser == null) {
+    await client.chat.postMessage({
+      channel: requester,
+      text: "Error submitting borrow request: you must select a user to approve this request because it's being borrowed for more than 7 days."
+    });
+    return
+  }
 
   //add to database
   const crypto = require('crypto');

@@ -27,21 +27,21 @@
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "`/workspace-request [request description]` make a request to the workspace managers\n`/workspace-complete [task ID]` record tasks you've completed towards your workspace contributions"
+        "text": "`/workspace-request [request description]` make a request to the workspace managers\n`/workspace-complete [task ID]` record tasks you've completed towards your workspace contributions\n`/borrow` request to borrow a tool from the workspace\n`/borrowed-items` list of items currently borrowed from the workspace"
       }
     },
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "<https://docs.google.com/spreadsheets/d/1q1pYRZxo9rS-IyfcKZKzBRJSUtAgbmrR8gDL26YFqTQ/edit#gid=0|Link to member requirements spreadsheet>"
+        "text": "<https://docs.google.com/spreadsheets/d/12vkDKfNrOUOwXIsFGQSqT4TDuydOPIx3WiBP5m1LUtw/edit#gid=643563292|Link to member requirements spreadsheet>"
       }
     },
     {
       "type": "section",
       "text": {
         "type": "mrkdwn",
-        "text": "<https://docs.google.com/spreadsheets/d/12vkDKfNrOUOwXIsFGQSqT4TDuydOPIx3WiBP5m1LUtw/edit#gid=643563292|Link to cleaning duties spreadsheet>"
+        "text": "<https://docs.google.com/spreadsheets/d/1H-DUIAoUmsh2QWe0O9Lts67oEdP0FbVtT3xsi7gUWrc/edit#gid=0|Link to cleaning duties spreadsheet>"
       }
     },
     {
