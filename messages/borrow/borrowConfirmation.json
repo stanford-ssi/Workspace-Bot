@@ -1,0 +1,104 @@
+{
+    "channel": "metadata.requester_id",
+    "text": "Your request has been submitted.",
+    "blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Thank you for checking out the item(s). Please return the item(s) by the [date]. If you have any questions, please contact the workspace managers."
+			}
+		},
+		{
+			"type": "header",
+			"text": {
+				"type": "plain_text",
+				"text": "Items Borrowed: ",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+			"element": {
+				"type": "static_select",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Click to extend",
+					"emoji": true
+				},
+				"options": [
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "1 Day",
+							"emoji": true
+						},
+						"value": "1"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "2 Days",
+							"emoji": true
+						},
+						"value": "2"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "3 Days",
+							"emoji": true
+						},
+						"value": "3"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "5 Days",
+							"emoji": true
+						},
+						"value": "5"
+					},
+					{
+						"text": {
+							"type": "plain_text",
+							"text": "7 Days",
+							"emoji": true
+						},
+						"value": "7"
+					}
+				],
+				"action_id": "extension_request"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Extend",
+				"emoji": true
+			}
+		},
+		{
+			"type":"divider"
+		},
+		{
+			"type": "actions",
+			"elements": [
+				{
+					"type": "button",
+					"text": {
+						"type": "plain_text",
+						"text": "Return",
+						"emoji": true
+					},
+					"value": "return",
+					"action_id" : "return"
+				}
+			]
+		}
+	],
+	"metadata": {
+		"event_type": "test",
+		"event_payload": {
+		  "borrowId": "invalid"
+		}
+	  }
+}

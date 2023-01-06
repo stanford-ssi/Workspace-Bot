@@ -18,8 +18,20 @@ module.exports.fs = fs;
 const { GoogleSpreadsheet } = require('google-spreadsheet');
 const taskDoc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID_TASKS);
 const memberDoc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID_MEMBERS);
+const borrowDoc = new GoogleSpreadsheet(process.env.GOOGLE_SHEET_ID_BORROW);
 module.exports.taskDoc = taskDoc;
 module.exports.memberDoc = memberDoc;
+module.exports.borrowDoc = borrowDoc;
+
+//Database
+const mysql = require('mysql2');
+module.exports.mysql = mysql;
+module.exports.connection = mysql.createConnection({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE
+});
 
 
 //General functions
@@ -31,6 +43,19 @@ module.exports.loadSheet = async function loadSheet(doc, title) {
   await doc.loadInfo(); // loads document properties and worksheets
   const sheet = doc.sheetsById[title]
   const cellRange = `A1:F${sheet.rowCount}`
+  await sheet.loadCells(cellRange)
+  console.log(`Loaded ${sheet.title} with ${sheet.rowCount} rows`)
+  return sheet
+}
+
+module.exports.loadSheetRange = async function loadSheet(doc, title, range) {
+  await doc.useServiceAccountAuth({
+    client_email: process.env.CLIENT_EMAIL,
+    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, '\n'),
+  });
+  await doc.loadInfo(); // loads document properties and worksheets
+  const sheet = doc.sheetsById[title]
+  const cellRange = range
   await sheet.loadCells(cellRange)
   console.log(`Loaded ${sheet.title} with ${sheet.rowCount} rows`)
   return sheet
@@ -70,6 +95,12 @@ module.exports.getNameGreeting = async function getNameGreeting(fullName) {
   }
 }
 
+module.exports.sleep = function sleep(milliseconds) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
+}
+
 
 
 //Workspace Request
@@ -94,7 +125,16 @@ const { handleDM, handleDMSubmission } = require('./dmHandler');
 app.command('/workspace-dm', handleDM);
 app.view('dm_modal', handleDMSubmission);
 
+//Thank members for coming to workspace cleaning
+const { handleThank } = require('./workspaceThankHandler');
+app.command('/workspace-thank', handleThank);
 
+//Borrow
+const { handleBorrow, handleBorrowSubmit, handleReturn, handleExtension } = require('./borrowHandler');
+app.command('/borrow', handleBorrow);
+app.view('borrow_modal', handleBorrowSubmit);
+app.action('return', handleReturn);
+app.action('extension_request', handleExtension);
 
 (async () => {
   // Start your app

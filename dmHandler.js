@@ -1,7 +1,6 @@
-const { app, fs, loadSheet, memberDoc, getUserIdFromEmail, getNameGreeting } = require('./app');
+const { app, fs, loadSheet, memberDoc, getUserIdFromEmail, getNameGreeting, sleep } = require('./app');
 
 module.exports.handleDM = async ({ command, ack, respond }) => {
-    console.log("DM command received")
     await ack();
 
     const userID = command.user_id
@@ -94,11 +93,7 @@ module.exports.handleDMSubmission = async ({ ack, body, view, client, logger }) 
         var successfulMessages = 0
         var failedMessages = []
 
-        function sleep(milliseconds) {
-            return new Promise((resolve) => {
-              setTimeout(resolve, milliseconds);
-            });
-          }
+
 
         for (var i = 0; i < usersToSendMessageTo.length; i++) {
             try{

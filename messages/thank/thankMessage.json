@@ -1,0 +1,43 @@
+{
+	"channel": "insert",
+	"link_names": "true",
+	"text": "Thanks for coming to workspace cleaning!",
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "Hi,",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "Thank you for contributing to the workspace cleaning! You've now completed [undefined]",
+				"emoji": true
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "mrkdwn",
+					"text": "Questions? DM @Lawton and @Matthew"
+				}
+			]
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": " ",
+				"emoji": true
+			}
+		}
+	]
+}

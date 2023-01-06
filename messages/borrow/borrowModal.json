@@ -1,0 +1,102 @@
+{
+	"type": "modal",
+    "callback_id": "borrow_modal",
+	"title": {
+		"type": "plain_text",
+		"text": "Borrow Request",
+		"emoji": true
+	},
+	"submit": {
+		"type": "plain_text",
+		"text": "Submit",
+		"emoji": true
+	},
+	"close": {
+		"type": "plain_text",
+		"text": "Cancel",
+		"emoji": true
+	},
+	"blocks": [
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "All borrowed items must be requested on this form before being removed from SSI's workspace. You can add multiple items to one request, assuming they'll be returned at the same time.",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+            "block_id": "itemsBorrowed",
+			"element": {
+				"type": "plain_text_input",
+				"action_id": "plain_text_input_action"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Item(s) borrowed",
+				"emoji": true
+			}
+		},
+		{
+			"type": "input",
+            "block_id": "returnDate",
+			"element": {
+				"type": "datepicker",
+				"initial_date": "2023-01-6",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select a date",
+					"emoji": true
+				},
+				"action_id": "datepicker_action"
+			},
+			"label": {
+				"type": "plain_text",
+				"text": "Return Date",
+				"emoji": true
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "section",
+			"text": {
+				"type": "plain_text",
+				"text": "If the item(s) you're borrowing exceed $200 of value, or it's being borrowed for more than 7 days, please get permission from someone in leadership before borrowing. If you're unsure who to ask, the team lead of the project you're active in, the workspace managers, or the presidents are a good starting point.",
+				"emoji": true
+			}
+		},
+		{
+			"type": "section",
+            "block_id": "permissionUser",
+			"text": {
+				"type": "mrkdwn",
+				"text": "Permission"
+			},
+			"accessory": {
+				"type": "users_select",
+				"placeholder": {
+					"type": "plain_text",
+					"text": "Select a user",
+					"emoji": true
+				},
+				"action_id": "users_select_action"
+			}
+		},
+		{
+			"type": "divider"
+		},
+		{
+			"type": "context",
+			"elements": [
+				{
+					"type": "plain_text",
+					"text": "SSI allows members to borrow equipment insofar that it doesn't interfere with its intended use within SSI. If borrowing equipment for personal use you may be responsible for lost, damaged, or late items. The items are expected to be returned in equal or better condition than they were borrowed in. When you return the item, you must complete the \"SSI return form\". You'll receive reminders from the Workspace Bot on Slack with a link to this form, and periodic reminders as the return deadline approaches. If the item is required for SSI use before the return date, you may be required to return it early.",
+					"emoji": true
+				}
+			]
+		}
+	]
+}
