@@ -77,13 +77,13 @@ module.exports.indexOfUserEmail = async function indexOfUserEmail(userEmail, she
   }
 }
 
-module.exports.getUserIdFromEmail = async function getUserIdFromEmail(userEmail) { //might need async stuff here too
+module.exports.getUserIdFromEmail = async function getUserIdFromEmail(userEmail) {
   try {
     return result = await app.client.users.lookupByEmail({
       email: userEmail
     }).user.id
   } catch (e) {
-    return userEmail //if it can't find it, returns user email to check what happened
+    return userEmail //if it can't find it, returns user email to print in error message
   }
 }
 
@@ -146,7 +146,4 @@ setInterval(checkOverdue, 86400000); // Execute the doSomething function every 6
   console.log('⚡️ Bolt app is running!');
 })();
 
-/* Todo:
-- Messages workspace core when person completes task asynchronously
-*/
 

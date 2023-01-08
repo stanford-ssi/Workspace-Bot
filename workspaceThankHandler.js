@@ -15,9 +15,6 @@ module.exports.handleThank = async ({ command, ack, respond }) => {
         return
     }
 
-    //get list of users to send message to 
-    //TODO NEXT: troubleshoot why it isn't sending to anyone
-
     var usersToSendMessageTo = []
     const memberAttendanceSheet = await loadSheet(memberDoc, process.env.GOOGLE_SHEET_ATTENDANCE_TAB)
     for (var i = 0; i < memberAttendanceSheet.rowCount; i++) {
@@ -94,7 +91,7 @@ module.exports.handleThank = async ({ command, ack, respond }) => {
             await app.client.chat.postMessage(message)
             successfulMessages++
 
-            await sleep(1000);
+            await sleep(1000); //sleep prevents exceeding rate limits of Slack API
 
 
         } catch (e){

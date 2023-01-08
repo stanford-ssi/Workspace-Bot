@@ -1,4 +1,4 @@
-const { app, fs, loadSheet, memberDoc, getUserIdFromEmail, getNameGreeting, sleep } = require('./app');
+const { app, fs, loadSheet, memberDoc, getNameGreeting, sleep } = require('./app');
 
 module.exports.handleDM = async ({ command, ack, respond }) => {
     await ack();
