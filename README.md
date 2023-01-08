@@ -1,5 +1,5 @@
 ## Overview:
-Read about the use of this software [here](URL "https://lawtonskaling.sites.stanford.edu/news/workspace-bot")
+Read about the use of this software [here](https://lawtonskaling.sites.stanford.edu/news/workspace-bot)
 
 Workspace bot was developed for the Stanford Student Space Initiative (SSI) Slack, to provide a variety of easy to access functions related to workspace organization
 
