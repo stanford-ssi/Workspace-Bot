@@ -1,4 +1,4 @@
-##Overview:
+## Overview:
 Read about the use of this software [here](URL "https://lawtonskaling.sites.stanford.edu/news/workspace-bot")
 
 Workspace bot was developed for the Stanford Student Space Initiative (SSI) Slack, to provide a variety of easy to access functions related to workspace organization
@@ -7,11 +7,11 @@ Workspace bot was developed for the Stanford Student Space Initiative (SSI) Slac
 2. Members can make workspace requests that are sent directly to workspace managers. It improved tracking over sending suggestions via DMs, and keeps members in the loop as a request is fulfilled. 
 3. SSI allows members to borrow equipment for outside projects. The bot logs what items members have borrowed, reminds them to return it, and ensures members are not taking equipment out of the lab that may be used
 
-##How it works
+## How it works
 
 The app is built on Node JS with the Slack Bolt framework. It’s hosted on Heroku, alongside a JawsDB database. Some features are easier viewed in a spreadsheet than on Slack, so for those data is stored on a Google Sheet and the bot accesses them via the sheets API. 
 
-##History:
+## History:
 
 The workspace bot was first implemented summer of 2022 after Lawton and Matthew decided to implement a workspace cleaning requirement, to make tracking it easier on their part and more seamless for all SSI users. It was met with mixed success. The workspace became much improved, with a record 30 people doing workspace cleanings (when they were offered previously, fewer than 10 would usually show up). However some features, such as the requests, were not widely publicized and thus rarely used. Furthermore the implementation of Google Sheets API stopped working partway through the quarter, and thus we resorted to manually logging when people completed a requirement via DM. A number of new opportunities presented themselves after trying the software, such as a way to confirm people’s attendance was recorded
 
